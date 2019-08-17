@@ -46,3 +46,6 @@ kits.getId = function(){
   let id = time + '' + r;
   return id;
 }
+
+
+
