@@ -105,3 +105,87 @@ kits.randomRGBColor = function(){
   return str; 
 
 }
+
+
+//从localStorage里面根据指定的键(key)获取一个数组
+//getLocalDataArray(key,status)  
+//参数：
+//key ===>要查询数据的键
+//status ===>是否要颠倒数据，true-->颠倒，false-->不颠倒
+kits.getLocalDataArray = function(key,status) {
+  let get_datas = localStorage.getItem(key);   //根据key获取数据，但是获取到的是JSON格式的数据
+  let gd_arrs = JSON.parse(get_datas);  //把json格式的数据转换为DOM格式
+  gd_arrs = gd_arrs || [];    //短路运算，判断是否为空数据，
+  
+  statu = status || 0;
+  if(status){
+    gd_arrs = gd_arrs.reverse();
+  }
+  return gd_arrs;
+}
+
+
+//将一个数组(arr)以指定的键(key)存储到localStorage里面
+//saveLocalDataArray(key,arr)
+//参数：
+//key ===>localStorage里面根据根据key存储的数据
+//arr ===> 要存入localStorage的key里面的数据
+kits.saveLocalDataArray = function(key,arr){
+  let store_arr = JSON.stringify(arr);   //把数据转换为json格式   store：储存
+
+  localStorage.setItem(key,store_arr);
+}
+
+
+//向localStorage里面指定键(key)的数组数据追加一个数据对象（data）
+//appendDataIntoArray(key,data)
+//参数
+//key ===>localStorage里面根据根据key存储的数据
+//data ===>你要追加到localstorage的数据
+kits.appendDataIntoArray = function(key,data){
+  let get_datas = localStorage.getItem(key);  //先根据key获取locaStorage的数据
+  let gd_arrs = JSON.parse(get_datas);    //把获取出来的数据转换为DOM格式的数组
+  gd_arrs.push(data);           //数组名.push(num1,num2...)向数组后面添加数据，可以多个，但必须要有一个，
+                               //该方法返回值是新数组的长度
+  localStorage.setItem(key,gd_arrs);    //根据key重新写入localStorage                         
+
+}
+
+
+
+//根据对应的id从localStorage中指定键(key)的数组中删除一条数据
+//deleteLocalDataById(key,id)
+//参数
+//key ===>localStorage里面根据根据key存储的数据
+//id ===>根据你传入的id，找到localStorage里面的key对应的数据，删除掉
+kits.deleteLocalDataById = function(key,id){
+  let get_datas = localStorage.getItem(key);
+  let gd_arrs = JSON.parse(get_datas);
+  gd_arrs.forEach(function(e,i){
+    if(e.id === id){
+      gd_arrs.splice(i,1);
+    }
+  });
+  let json = JSON.stringify(gd_arrs);
+  localStorage.setItem(key,json);
+}
+
+
+//根据id修改localStorage里面的指定键(key)的数组数据
+//modifyLocalDataById(key,id,data)  
+//参数
+//key ===>localStorage里面根据根据key存储的数据
+//id ===>根据你传入的id，找到localStorage里面的key对应的数据
+//data ===>把通过id找到的数据，修改为你传入的data
+kits.modifyLocalDataById =function(key,id,data){
+  let get_datas = localStorage.getItem(key);
+  let gd_arrs = JSON.parse(get_datas);
+  gd_arrs.forEach(function(e,i){
+    if(e.id === id){
+      gd_arrs.splice(i,1,data);
+    }
+  });
+  let json = JSON.stringify(gd_arrs);
+  localStorage.setItem(key,json);
+}
+
